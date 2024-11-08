@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 class UserRepositoryImpl(private val apiService: ApiService) : UserRepository {
+
     override suspend fun registerUser(
         name: String,
         email: String,

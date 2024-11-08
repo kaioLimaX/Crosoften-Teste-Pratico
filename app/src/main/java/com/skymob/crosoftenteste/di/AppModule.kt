@@ -14,6 +14,8 @@ import com.skymob.crosoftenteste.domain.usecases.auth.RegisterUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.GetAllBooksUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.GetBookByIdUseCase
 import com.skymob.crosoftenteste.domain.usecases.file.UploadFileUseCase
+import com.skymob.crosoftenteste.presentation.ui.auth.login.LoginViewModel
+import com.skymob.crosoftenteste.presentation.ui.auth.register.RegisterViewModel
 import com.skymob.crosoftenteste.util.SharedPreferencesManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -53,11 +55,12 @@ val appModule = module {
     factory { GetBookByIdUseCase(get()) }
     factory { UploadFileUseCase(get()) }
 
-  /*  //viewModels
+  //viewModels
     viewModel { RegisterViewModel(get()) }
-    viewModel { LoginViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
-    viewModel { ListBooksViewModel(get()) }
-    viewModel { DetailsViewModel(get()) }
-    viewModel { NewBookViewModel(get()) }*/
+
+    viewModel { LoginViewModel(get(),get()) }
+  /*    viewModel { ProfileViewModel(get()) }
+      viewModel { ListBooksViewModel(get()) }
+      viewModel { DetailsViewModel(get()) }
+      viewModel { NewBookViewModel(get()) }*/
 }
