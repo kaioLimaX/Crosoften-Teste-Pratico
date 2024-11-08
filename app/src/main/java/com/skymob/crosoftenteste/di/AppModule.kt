@@ -9,9 +9,15 @@ import com.skymob.crosoftenteste.data.remote.repository.UserRepositoryImpl
 import com.skymob.crosoftenteste.domain.repository.BookRepository
 import com.skymob.crosoftenteste.domain.repository.FileRepository
 import com.skymob.crosoftenteste.domain.repository.UserRepository
+import com.skymob.crosoftenteste.domain.usecases.auth.LoginUseCase
+import com.skymob.crosoftenteste.domain.usecases.auth.RegisterUseCase
+import com.skymob.crosoftenteste.domain.usecases.book.GetAllBooksUseCase
+import com.skymob.crosoftenteste.domain.usecases.book.GetBookByIdUseCase
+import com.skymob.crosoftenteste.domain.usecases.file.UploadFileUseCase
 import com.skymob.crosoftenteste.util.SharedPreferencesManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.scope.get
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
@@ -40,14 +46,14 @@ val appModule = module {
     single<BookRepository> { BookRepositoryImpl(get()) }
     single<FileRepository> { FileRepositoryImpl(get()) }
 
-/*    //useCases
-    factory { RegisterUserUseCase(get()) }
+   //useCases
+    factory { RegisterUseCase(get()) }
     factory { LoginUseCase(get()) }
-    factory { GetBooksUseCase(get()) }
+    factory { GetAllBooksUseCase(get()) }
     factory { GetBookByIdUseCase(get()) }
-    factory { UploadAndAddBookUseCase(get(),get()) }
+    factory { UploadFileUseCase(get()) }
 
-    //viewModels
+  /*  //viewModels
     viewModel { RegisterViewModel(get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { ProfileViewModel(get()) }

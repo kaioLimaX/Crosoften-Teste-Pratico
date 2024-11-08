@@ -1,4 +1,4 @@
-package com.skymob.crosoftenteste.data.util
+package com.skymob.crosoftenteste.util
 
 import android.net.Uri
 import android.content.Context
