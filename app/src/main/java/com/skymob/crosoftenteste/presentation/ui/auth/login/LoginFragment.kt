@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.skymob.crosoftenteste.R
 import com.skymob.crosoftenteste.databinding.FragmentLoginBinding
 import com.skymob.crosoftenteste.presentation.ui.base.BaseFragment
+import com.skymob.crosoftenteste.presentation.ui.util.setupClickableTextView
 
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     override val viewModel: LoginViewModel by viewModels()
@@ -29,9 +30,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLogin.setOnClickListener {
-            goToMain()
+            navigateToMenu()
         }
-        //configurar o texto do botão "Registre-se"
         formatTextButtonRegister()
 
     }
@@ -43,39 +43,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
             textRegister,
             "Registre-se",
             onClick = {
-                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+                navigateToRegister()
             }
         )
     }
 
-    //cria um hiperlink e onclick para o texto
-    fun setupClickableTextView(
-        textView: TextView,
-        fullText: String,
-        linkText: String,
-        onClick: () -> Unit // Função lambda para o clique
-    ) {
-        // Cria um SpannableString com o texto completo
-        val spannableString = SpannableString(fullText)
-
-        // Define o índice onde o linkText começa
-        val startIndex = fullText.indexOf(linkText)
-        val endIndex = startIndex + linkText.length
-
-        // Adiciona um ClickableSpan
-        spannableString.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                // Chama a função lambda ao clicar no texto clicável
-                onClick()
-            }
-        }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        // Define o SpannableString no TextView
-        textView.text = spannableString
-        textView.movementMethod = LinkMovementMethod.getInstance() // Permite clicar no link
+    private fun navigateToRegister() {
+        findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
     }
 
-    private fun goToMain() {
+    private fun navigateToMenu() {
         findNavController().navigate(
             R.id.action_loginFragment_to_mainFragment,
             null,

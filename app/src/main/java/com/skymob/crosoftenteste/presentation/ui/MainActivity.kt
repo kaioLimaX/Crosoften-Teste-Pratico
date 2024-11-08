@@ -5,16 +5,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.skymob.crosoftenteste.R
 import com.skymob.crosoftenteste.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         setSupportActionBar(binding.toolbar)
+
         navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
@@ -56,40 +54,46 @@ class MainActivity : AppCompatActivity() {
         with(binding){
 
             when (destination) {
+
                 R.id.listFragment ->{
                     toolbar.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.VISIBLE
                     shouldShowMenu = true
+                    invalidateOptionsMenu()
                 }
+
                 R.id.loginFragment -> {
                     toolbar.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
                     shouldShowMenu = false
+                    invalidateOptionsMenu()
                 }
 
                 R.id.registerFragment -> {
                     toolbar.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.GONE
                     shouldShowMenu = false
+                    invalidateOptionsMenu()
                 }
                 R.id.newBookFragment -> {
                     toolbar.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.GONE
                     shouldShowMenu = false
+                    invalidateOptionsMenu()
                 }
 
                 else -> {
                     toolbar.visibility = View.VISIBLE
                     bottomNavigationView.visibility = View.VISIBLE
                     shouldShowMenu = false
+                    invalidateOptionsMenu()
                 }
             }
-            invalidateOptionsMenu()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_nav, menu)
+        menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true
     }
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
