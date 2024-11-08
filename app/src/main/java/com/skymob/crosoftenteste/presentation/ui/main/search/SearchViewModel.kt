@@ -1,4 +1,6 @@
 package com.skymob.crosoftenteste.presentation.ui.main.search
 
-class SearchViewModel {
+import androidx.lifecycle.ViewModel
+
+class SearchViewModel : ViewModel() {
 }

@@ -1,4 +1,6 @@
 package com.skymob.crosoftenteste.presentation.ui.auth.register
 
-class RegisterViewModel {
+import androidx.lifecycle.ViewModel
+
+class RegisterViewModel : ViewModel() {
 }

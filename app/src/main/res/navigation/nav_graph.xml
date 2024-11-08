@@ -2,4 +2,52 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"/>
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/detailsBookFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.book.details.DetailsBookFragment"
+        android:label="DetailsBookFragment" />
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.main.list.ListFragment"
+        android:label="ListFragment" />
+    <action
+        android:id="@+id/action_listFragment_to_detailsBookFragment"
+        app:destination="@id/detailsBookFragment" />
+    <action
+        android:id="@+id/action_listFragment_to_newBookFragment"
+        app:destination="@id/newBookFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.auth.login.LoginFragment"
+        android:label="LoginFragment" />
+    <action
+        android:id="@+id/action_loginFragment_to_mainFragment"
+        app:destination="@id/listFragment" />
+    <action
+        android:id="@+id/action_loginFragment_to_registerFragment"
+        app:destination="@id/registerFragment" />
+    <fragment
+        android:id="@+id/newBookFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.book.new.NewBookFragment"
+        android:label="NewBookFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.main.profile.ProfileFragment"
+        android:label="ProfileFragment" />
+    <action
+        android:id="@+id/action_profileFragment_to_loginFragment"
+        app:destination="@id/loginFragment" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.auth.register.RegisterFragment"
+        android:label="RegisterFragment" />
+    <action
+        android:id="@+id/action_registerFragment_to_loginFragment"
+        app:destination="@id/loginFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.skymob.crosoftenteste.presentation.ui.main.search.SearchFragment"
+        android:label="SearchFragment" />
+</navigation>

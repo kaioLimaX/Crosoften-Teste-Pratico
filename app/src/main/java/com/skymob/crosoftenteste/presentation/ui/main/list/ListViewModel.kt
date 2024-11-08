@@ -1,4 +1,6 @@
 package com.skymob.crosoftenteste.presentation.ui.main.list
 
-class ListViewModel {
+import androidx.lifecycle.ViewModel
+
+class ListViewModel : ViewModel() {
 }

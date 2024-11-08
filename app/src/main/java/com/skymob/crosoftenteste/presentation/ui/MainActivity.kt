@@ -2,6 +2,7 @@ package com.skymob.crosoftenteste.presentation.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -16,89 +17,100 @@ import com.skymob.crosoftenteste.R
 import com.skymob.crosoftenteste.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var navController: NavController
-    private lateinit var navHostFragment : NavHostFragment
-    private val binding by lazy{
+    private lateinit var navHostFragment: NavHostFragment
+
+    private var shouldShowMenu = false
+
+    private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        initViews(binding)
-
-
+        initView()
     }
 
+    private fun initView() {
+        setSupportActionBar(binding.toolbar)
+        navHostFragment =
+            supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
+        navController = navHostFragment.navController
+        binding.bottomNavigationView.apply {
+            setupWithNavController(navController)
+        }
+
+        with(binding) {
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                supportActionBar?.setDisplayHomeAsUpEnabled(destination.id != R.id.listFragment)
+                setVisibilityComponents(destination.id)
+            }
+        }
+    }
+
+    private fun setVisibilityComponents(destination: Int) {
+        with(binding){
+
+            when (destination) {
+                R.id.listFragment ->{
+                    toolbar.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.VISIBLE
+                    shouldShowMenu = true
+                }
+                R.id.loginFragment -> {
+                    toolbar.visibility = View.GONE
+                    bottomNavigationView.visibility = View.GONE
+                    shouldShowMenu = false
+                }
+
+                R.id.registerFragment -> {
+                    toolbar.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.GONE
+                    shouldShowMenu = false
+                }
+                R.id.newBookFragment -> {
+                    toolbar.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.GONE
+                    shouldShowMenu = false
+                }
+
+                else -> {
+                    toolbar.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.VISIBLE
+                    shouldShowMenu = false
+                }
+            }
+            invalidateOptionsMenu()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_nav, menu)
+        return true
+    }
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        // Controla a visibilidade do item do menu com base na variável shouldShowMenu
+        menu?.findItem(R.id.newBookFragment)?.isVisible = shouldShowMenu
+        Log.d("MenuVisibility", "shouldShowMenu: $shouldShowMenu")
+        return super.onPrepareOptionsMenu(menu)
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            android.R.id.home -> { // ID do botão de voltar na Toolbar
-                Log.i("_clique", "onOptionsItemSelected: ")
-                onBackPressed() // Volta para o fragmento anterior
-                true // Indica que o evento foi tratado
+            R.id.newBookFragment -> {
+                navController.navigate(R.id.action_listFragment_to_newBookFragment)// Ação para o item de configurações
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun setVisibilityForNavigationAndToolbar(isBottomNavVisible: Boolean, isToolbarVisible: Boolean) {
-        binding.bottomNavigation.visibility = if (isBottomNavVisible) View.VISIBLE else View.GONE
-
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    private fun initViews(binding: ActivityMainBinding) {
 
-        navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerView.id) as NavHostFragment
-        navController = navHostFragment.navController
-
-
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.loginFragment -> setVisibilityForNavigationAndToolbar(
-                    isBottomNavVisible = false,
-                    isToolbarVisible = false
-                )
-                R.id.registerFragment -> setVisibilityForNavigationAndToolbar(
-                    isBottomNavVisible = false,
-                    isToolbarVisible = true
-                )
-                R.id.detailsFragment -> setVisibilityForNavigationAndToolbar(
-                    isBottomNavVisible = false,
-                    isToolbarVisible = true
-                )
-                R.id.newBookFragment -> setVisibilityForNavigationAndToolbar(
-                    isBottomNavVisible = false,
-                    isToolbarVisible = true
-                )
-
-                else -> setVisibilityForNavigationAndToolbar(
-                    isBottomNavVisible = true,
-                    isToolbarVisible = false
-                )
-            }
-            //updateToolbar(destination.id)
-        }
-
-        binding.bottomNavigation.apply {
-            setupWithNavController(navController)
-        }
-
-    }
-
-    /* private fun updateToolbar(destinationId: Int) {
-         when (destinationId) {
-             R.id.loginFragment -> {
-                 supportActionBar?.title = "Login"
-                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
-             }
-             R.id.registerFragment -> {
-                 supportActionBar?.title = "Registrar"
-                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
-             }
-             else -> {
-                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
-             }
-         }
-     }*/
 }

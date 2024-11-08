@@ -1,4 +1,6 @@
 package com.skymob.crosoftenteste.presentation.ui.book.details
 
-class DetailsViewModel {
+import androidx.lifecycle.ViewModel
+
+class DetailsViewModel : ViewModel() {
 }
