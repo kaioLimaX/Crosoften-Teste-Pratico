@@ -1,14 +1,9 @@
 package com.skymob.crosoftenteste.presentation.ui.auth.login
 
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
