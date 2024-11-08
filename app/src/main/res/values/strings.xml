@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">CrosoftenTeste</string>
+    <string name="app_description">
+    Este aplicativo oferece uma plataforma prática e intuitiva para explorar livros.\n
+    Você pode: \n\n
+
+    • Listar livros disponíveis em diversas categorias\n\n
+    • Buscar livros pelo nome de forma rápida e fácil.\n\n
+    • Filtrar livros por categoria para encontrar exatamente o que você procura\n\n
+    • Adicionar livros de sua escolha à sua lista, personalizando ainda mais sua experiência.
+</string>
 </resources>
