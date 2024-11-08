@@ -6,7 +6,11 @@
     <fragment
         android:id="@+id/detailsBookFragment"
         android:name="com.skymob.crosoftenteste.presentation.ui.book.details.DetailsBookFragment"
-        android:label="DetailsBookFragment" />
+        android:label="DetailsBookFragment" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/listFragment"
         android:name="com.skymob.crosoftenteste.presentation.ui.main.list.ListFragment"
