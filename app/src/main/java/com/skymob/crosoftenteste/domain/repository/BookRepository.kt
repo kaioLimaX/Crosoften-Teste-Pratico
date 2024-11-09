@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface BookRepository {
 
     suspend fun getBooks(
-        search: String? = "null",
+        search: String? = null,
         categoryId: Int? = null,
         page: Int? = null,
         limit: Int? = null

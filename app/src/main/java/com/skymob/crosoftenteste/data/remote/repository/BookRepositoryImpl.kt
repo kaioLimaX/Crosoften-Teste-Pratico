@@ -17,7 +17,7 @@ class BookRepositoryImpl(private val apiService: ApiService) : BookRepository {
         page: Int?,
         limit: Int?
     ): Flow<Result<List<Data>>> = flow {
-        val response = apiService.getBooks()
+        val response = apiService.getBooks(search, categoryId, page, limit)
 
         if (response.isSuccessful) {
             val body = response.body()
