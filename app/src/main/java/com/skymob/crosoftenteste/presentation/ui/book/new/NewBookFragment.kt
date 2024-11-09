@@ -3,10 +3,14 @@ package com.skymob.crosoftenteste.presentation.ui.book.new
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.viewModels
 import com.permissionx.guolindev.PermissionX
 import com.skymob.crosoftenteste.databinding.FragmentNewBookBinding
@@ -14,6 +18,15 @@ import com.skymob.crosoftenteste.presentation.ui.base.BaseFragment
 
 class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>() {
     override val viewModel: NewBookViewModel by viewModels()
+
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback é invocado depois que o usuário seleciona um item de mídia ou fecha o seletor.
+        if (uri != null) {
+            binding.imgBook.setImageURI(uri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
 
     override fun getViewBinding(
@@ -24,7 +37,17 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initOnClick()
         checkPermissions()
+
+    }
+
+    private fun initOnClick() {
+        with(binding){
+            btnSelectImage.setOnClickListener {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        }
     }
 
     private fun checkPermissions() {
@@ -42,7 +65,7 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
         PermissionX.init(this)
             .permissions(permissions)
             .onForwardToSettings { scope, deniedList ->
-                scope.showForwardToSettingsDialog(deniedList, "You need to allow necessary permissions in Settings manually", "OK", "Cancel")
+                scope.showForwardToSettingsDialog(deniedList, "Você precisa permitir as permissões necessárias nas configurações manualmente", "OK", "Cancelar")
             }
             .request { allGranted, grantedList, deniedList ->
                 if (!allGranted) {
