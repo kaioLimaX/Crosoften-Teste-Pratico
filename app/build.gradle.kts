@@ -67,6 +67,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    //permissionX
+    implementation ("com.guolindev.permissionx:permissionx:1.8.1")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

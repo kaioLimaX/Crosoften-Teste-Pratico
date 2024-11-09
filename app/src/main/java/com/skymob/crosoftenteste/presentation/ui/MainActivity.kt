@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.apply {
             setupWithNavController(navController)
         }
+
+        binding.bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(this, R.color.light_blue)
 
         with(binding) {
             navController.addOnDestinationChangedListener { _, destination, _ ->
