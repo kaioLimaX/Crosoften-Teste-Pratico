@@ -1,6 +1,7 @@
 package com.skymob.crosoftenteste.presentation.ui.book.new
 
 import android.Manifest
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +13,9 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.permissionx.guolindev.PermissionX
+import com.skymob.crosoftenteste.data.remote.dto.book.BookRequest
 import com.skymob.crosoftenteste.databinding.FragmentNewBookBinding
 import com.skymob.crosoftenteste.presentation.ui.base.BaseFragment
 import com.skymob.crosoftenteste.presentation.ui.state.ViewState
@@ -21,6 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>() {
+    var selectedImageUri: Uri? = null
     override val viewModel: NewBookViewModel by viewModel()
     private val alertLoading by lazy {
         AlertLoading(requireContext())
@@ -28,6 +32,7 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
+            selectedImageUri = uri
             binding.imgBook.setImageURI(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -53,12 +58,15 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
         viewModel.state.observe(viewLifecycleOwner){
             when(it){
                 is ViewState.Error -> {
+                    alertLoading.close()
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
                 is ViewState.Loading -> {
                     alertLoading.show("Adicionando novo Livro")
                 }
                 is ViewState.Sucess -> {
+                    alertLoading.close()
+                    findNavController().navigateUp()
                     Toast.makeText(requireContext(), "Livro adicionado com sucesso", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -69,6 +77,28 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
         with(binding){
             btnSelectImage.setOnClickListener {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+            btnRegisterNewBook.setOnClickListener {
+                val title = edtTitle.text.toString()
+                val author = edtAuthor.text.toString()
+                val description = edtDescription.text.toString()
+
+                if (selectedImageUri != null) {
+                    if (title.isNotEmpty() && author.isNotEmpty() && description.isNotEmpty()) {
+                        val bookRequest = BookRequest(
+                            title = title,
+                            author = author,
+                            categoryId = 1,
+                            summary = description
+                        )
+                        // Chama o ViewModel para processar o envio
+                        viewModel.uploadImageAndAddBook(selectedImageUri!!, bookRequest)
+                    } else {
+                        Toast.makeText(requireContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Selecione uma imagem", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -93,8 +123,6 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
             .request { allGranted, grantedList, deniedList ->
                 if (!allGranted) {
                     Toast.makeText(requireContext(), "Permissão negada", Toast.LENGTH_SHORT).show()
-                } else{
-                    Toast.makeText(requireContext(), "Permissão concedida", Toast.LENGTH_SHORT).show()
                 }
             }
     }
