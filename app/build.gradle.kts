@@ -54,7 +54,8 @@ dependencies {
 
     //koin
     implementation ("io.insert-koin:koin-android:3.4.0")         // Koin para Android
-    implementation ("io.insert-koin:koin-androidx-navigation:3.4.0") // Inclui suporte a ViewModel e Navigation
+    implementation ("io.insert-koin:koin-androidx-navigation:3.4.0") // Inclui suporte  Navigation
+
 
     //interceptor
     implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
@@ -70,7 +71,8 @@ dependencies {
     //permissionX
     implementation ("com.guolindev.permissionx:permissionx:1.8.1")
 
-
+// test koin
+    testImplementation ("io.insert-koin:koin-test-junit4:3.4.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

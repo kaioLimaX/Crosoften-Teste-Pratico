@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
 interface FileRepository {
-    suspend fun uploadImage(image : MultipartBody.Part): Flow<Result<UploadResponse>>
+    suspend fun uploadImage(image : Uri): Flow<Result<UploadResponse>>
 }

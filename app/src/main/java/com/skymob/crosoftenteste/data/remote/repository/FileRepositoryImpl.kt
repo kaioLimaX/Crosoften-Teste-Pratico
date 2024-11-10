@@ -5,16 +5,21 @@ import android.net.Uri
 import com.skymob.crosoftenteste.data.remote.api.ApiService
 import com.skymob.crosoftenteste.data.remote.dto.file.UploadResponse
 import com.skymob.crosoftenteste.domain.repository.FileRepository
+import com.skymob.crosoftenteste.util.prepareImageFile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 
-class FileRepositoryImpl(private val apiService: ApiService) : FileRepository {
+class FileRepositoryImpl(
+    private val apiService: ApiService,
+    private val context: Context
+) : FileRepository {
 
 
-    override suspend fun uploadImage(image: MultipartBody.Part): Flow<Result<UploadResponse>> =
+    override suspend fun uploadImage(uri: Uri): Flow<Result<UploadResponse>> =
         flow {
+            val image = prepareImageFile(context, uri)
             val response = apiService.uploadFile(image)
 
             if (response.isSuccessful) {

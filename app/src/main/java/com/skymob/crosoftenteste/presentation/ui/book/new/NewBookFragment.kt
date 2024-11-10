@@ -15,12 +15,18 @@ import androidx.fragment.app.viewModels
 import com.permissionx.guolindev.PermissionX
 import com.skymob.crosoftenteste.databinding.FragmentNewBookBinding
 import com.skymob.crosoftenteste.presentation.ui.base.BaseFragment
+import com.skymob.crosoftenteste.presentation.ui.state.ViewState
+import com.skymob.crosoftenteste.util.AlertLoading
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>() {
-    override val viewModel: NewBookViewModel by viewModels()
+    override val viewModel: NewBookViewModel by viewModel()
+    private val alertLoading by lazy {
+        AlertLoading(requireContext())
+    }
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        // Callback é invocado depois que o usuário seleciona um item de mídia ou fecha o seletor.
         if (uri != null) {
             binding.imgBook.setImageURI(uri)
         } else {
@@ -38,8 +44,25 @@ class NewBookFragment : BaseFragment<FragmentNewBookBinding, NewBookViewModel>()
         super.onViewCreated(view, savedInstanceState)
 
         initOnClick()
+        initObserver()
         checkPermissions()
 
+    }
+
+    private fun initObserver() {
+        viewModel.state.observe(viewLifecycleOwner){
+            when(it){
+                is ViewState.Error -> {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+                is ViewState.Loading -> {
+                    alertLoading.show("Adicionando novo Livro")
+                }
+                is ViewState.Sucess -> {
+                    Toast.makeText(requireContext(), "Livro adicionado com sucesso", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun initOnClick() {
