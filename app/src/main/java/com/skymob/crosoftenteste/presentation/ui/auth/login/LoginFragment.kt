@@ -37,7 +37,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     private fun initObserver() {
         viewModel.isLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
-            if (isLoggedIn) {
+            if (isLoggedIn == true) {
                 navigateToMenu()
             }
         }

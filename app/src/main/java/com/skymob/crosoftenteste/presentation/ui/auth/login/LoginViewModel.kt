@@ -14,8 +14,8 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
-    private val _isLoggedIn = MutableLiveData<Boolean>()
-    val isLoggedIn: LiveData<Boolean> get() = _isLoggedIn
+    private val _isLoggedIn = MutableLiveData<Boolean?>()
+    val isLoggedIn: LiveData<Boolean?> get() = _isLoggedIn
 
     private val _loginStatus = MutableLiveData<ViewState<LoginResponse>>()
     val loginStatus: LiveData<ViewState<LoginResponse>> get() = _loginStatus
@@ -25,8 +25,8 @@ class LoginViewModel(
     }
 
     private fun checkIfLoggedIn() {
-        val token = sharedPreferencesManager.getToken()
-        _isLoggedIn.value = !token.isNullOrEmpty() // Atualiza o LiveData com o estado de login
+        val checkKeepLogin = sharedPreferencesManager.checkKeepLogin()
+        _isLoggedIn.value = checkKeepLogin// Atualiza o LiveData com o estado de login
     }
 
     fun login(
@@ -39,8 +39,9 @@ class LoginViewModel(
             loginUseCase(credential, password).collect { result ->
                 result.onSuccess {
                     _loginStatus.value = ViewState.Sucess(it)
+                    sharedPreferencesManager.saveToken(it.token)
                     if(keepLogin){
-                        sharedPreferencesManager.saveToken(it.token)
+                       sharedPreferencesManager.keepLogin()
                     }
                 }.onFailure {
                     _loginStatus.value = ViewState.Error(it.message ?: "Erro desconhecido")

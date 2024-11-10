@@ -17,8 +17,13 @@ class SharedPreferencesManager(context: Context, private val gson: Gson) {
     fun getToken(): String? {
         return prefs.getString("auth_token", null)
     }
-
-
+    // Função para salvar o token
+    fun keepLogin() {
+        prefs.edit().putBoolean("keepLogin", true).apply()
+    }
+    fun checkKeepLogin(): Boolean? {
+        return prefs.getBoolean("keepLogin", false)
+    }
 
     // Função para salvar um objeto
     fun <T> saveObject(key: String, obj: T) {
