@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import com.skymob.crosoftenteste.R
 import com.skymob.crosoftenteste.databinding.FragmentProfileBinding
 import com.skymob.crosoftenteste.presentation.ui.base.BaseFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>() {
-    override val viewModel: ProfileViewModel by viewModels()
+    override val viewModel: ProfileViewModel by viewModel()
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -23,7 +26,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
     }
 
     private fun initOnClick() {
-        /*binding.btnLogout.setOnClickListener {
+        binding.btnLogout.setOnClickListener {
+            viewModel.logout()
             findNavController().navigate(
                 R.id.action_profileFragment_to_loginFragment, // Ação para ir de volta ao login
                 null,
@@ -31,6 +35,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
                     .setPopUpTo(R.id.profileFragment, true) // Limpa a pilha até o mainFragment
                     .build()
             )
-        }*/
+        }
     }
 }
