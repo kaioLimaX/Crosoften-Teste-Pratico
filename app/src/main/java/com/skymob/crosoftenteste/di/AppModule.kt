@@ -18,6 +18,7 @@ import com.skymob.crosoftenteste.domain.usecases.book.SearchBookUseCase
 import com.skymob.crosoftenteste.domain.usecases.file.UploadFileUseCase
 import com.skymob.crosoftenteste.presentation.ui.auth.login.LoginViewModel
 import com.skymob.crosoftenteste.presentation.ui.auth.register.RegisterViewModel
+import com.skymob.crosoftenteste.presentation.ui.book.details.DetailsViewModel
 import com.skymob.crosoftenteste.presentation.ui.book.new.NewBookViewModel
 import com.skymob.crosoftenteste.presentation.ui.main.list.ListViewModel
 import com.skymob.crosoftenteste.presentation.ui.main.search.SearchViewModel
@@ -66,10 +67,10 @@ val appModule = module {
     viewModel { RegisterViewModel(get()) }
 
     viewModel { LoginViewModel(get(), get()) }
-    viewModel { ListViewModel(get()) }
+    viewModel { ListViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { NewBookViewModel(get(),get()) }
     /*    viewModel { ProfileViewModel(get()) }
         viewModel { DetailsViewModel(get()) }
-        viewModel { NewBookViewModel(get()) }*/
+      */
 }

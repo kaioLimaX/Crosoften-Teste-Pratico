@@ -8,8 +8,8 @@
         android:name="com.skymob.crosoftenteste.presentation.ui.book.details.DetailsBookFragment"
         android:label="DetailsBookFragment" >
         <argument
-            android:name="bookId"
-            app:argType="integer" />
+            android:name="bookDetails"
+            app:argType="com.skymob.crosoftenteste.data.remote.dto.book.Data" />
     </fragment>
     <fragment
         android:id="@+id/listFragment"

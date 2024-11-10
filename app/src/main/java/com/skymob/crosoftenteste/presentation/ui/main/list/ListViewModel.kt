@@ -6,12 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skymob.crosoftenteste.data.remote.dto.book.Data
 import com.skymob.crosoftenteste.domain.usecases.book.GetAllBooksUseCase
+import com.skymob.crosoftenteste.domain.usecases.book.GetBookByIdUseCase
 import com.skymob.crosoftenteste.presentation.ui.state.ViewState
 import kotlinx.coroutines.launch
 
-class ListViewModel(private val getAllBooksUseCase: GetAllBooksUseCase) : ViewModel() {
+class ListViewModel(
+    private val getAllBooksUseCase: GetAllBooksUseCase,
+    private val getBookByIdUseCase: GetBookByIdUseCase
+
+) : ViewModel() {
     private val _listBooksStatus = MutableLiveData<ViewState<List<Data>>>()
     val listBooksStatus: LiveData<ViewState<List<Data>>> get() = _listBooksStatus
+
+    private val _getBookDetailsStatus = MutableLiveData<ViewState<Data>?>()
+    val getBookDetailsStatus: LiveData<ViewState<Data>?> get() = _getBookDetailsStatus
 
     init {
         getBooks()
@@ -33,4 +41,26 @@ class ListViewModel(private val getAllBooksUseCase: GetAllBooksUseCase) : ViewMo
         }
 
     }
+
+    fun getBookDetails(id: Int) {
+        viewModelScope.launch {
+            _getBookDetailsStatus.value = ViewState.Loading()
+            getBookByIdUseCase.invoke(id)
+                .collect { result ->
+                    result.onSuccess {
+                        _getBookDetailsStatus.value = ViewState.Sucess(it)
+                    }.onFailure {
+                        _getBookDetailsStatus.value = ViewState.Error(it.message.toString())
+                    }
+
+                }
+
+
+        }
+    }
+
+    fun resetBookDetailsStatus() {
+        _getBookDetailsStatus.value = null  // Ou um valor inicial apropriado
+    }
+
 }
