@@ -1,6 +1,7 @@
 package com.skymob.crosoftenteste.data.remote.repository
 
 import com.skymob.crosoftenteste.data.remote.api.ApiService
+import com.skymob.crosoftenteste.data.remote.api.interceptors.AuthInterceptor
 import com.skymob.crosoftenteste.data.remote.dto.user.LoginRequest
 import com.skymob.crosoftenteste.data.remote.dto.user.LoginResponse
 import com.skymob.crosoftenteste.data.remote.dto.user.RegisterRequest
@@ -10,7 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
-class UserRepositoryImpl(private val apiService: ApiService) : UserRepository {
+class UserRepositoryImpl(
+    private val apiService: ApiService,
+    private val authInterceptor: AuthInterceptor
+) : UserRepository {
 
     override suspend fun registerUser(
         name: String,
@@ -19,9 +23,9 @@ class UserRepositoryImpl(private val apiService: ApiService) : UserRepository {
         confirmPassword: String
     ): Flow<Result<RegisterResponse>> = flow {
         val userRequest = RegisterRequest(name, email, password, confirmPassword)
-
+        authInterceptor.disableAuthHeader()
         val response = apiService.registerUser(userRequest)
-
+        authInterceptor.enableAuthHeader()
         if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {
@@ -41,8 +45,9 @@ class UserRepositoryImpl(private val apiService: ApiService) : UserRepository {
     override suspend fun login(credential: String, password: String): Flow<Result<LoginResponse>> =
         flow {
             val user = LoginRequest(credential, password)
-
+            authInterceptor.disableAuthHeader()
             val response = apiService.loginUser(user)
+            authInterceptor.enableAuthHeader()
 
             if (response.isSuccessful) {
                 val body = response.body()
