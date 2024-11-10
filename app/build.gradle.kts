@@ -72,8 +72,10 @@ dependencies {
     //permissionX
     implementation ("com.guolindev.permissionx:permissionx:1.8.1")
 
-// test koin
+   // test koin
     testImplementation ("io.insert-koin:koin-test-junit4:3.4.0")
+    //mockk
+    testImplementation ("io.mockk:mockk:1.13.2") // MockK para mocking
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.skymob.crosoftenteste.R
@@ -108,7 +109,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.newBookFragment -> {
-                navController.navigate(R.id.action_listFragment_to_newBookFragment)// Ação para o item de configurações
+                val options = NavOptions.Builder()
+                    .setEnterAnim(androidx.navigation.ui.R.anim.nav_default_pop_enter_anim)
+                    .setExitAnim(androidx.navigation.ui.R.anim.nav_default_exit_anim)
+
+                    .build()
+
+                navController.navigate(R.id.action_listFragment_to_newBookFragment, null, options)// Ação para o item de configurações
                 true
             }
             else -> super.onOptionsItemSelected(item)
