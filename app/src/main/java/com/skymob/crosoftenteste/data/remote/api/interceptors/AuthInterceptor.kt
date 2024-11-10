@@ -4,17 +4,33 @@ import com.skymob.crosoftenteste.util.SharedPreferencesManager
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor(private val sharedPreferencesManager: SharedPreferencesManager) :
-    Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val token = sharedPreferencesManager.getToken() // Recupera o token do SharedPreferences
-        //val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTczMDQ3NTkwMiwiZXhwIjoxNzMzMDY3OTAyfQ.2eEiG9HJNjkdy0GvXQE5GTFpnFMkXNoKsA4xSTRLaWE"
+class AuthInterceptor(private val sharedPreferencesManager: SharedPreferencesManager) : Interceptor {
 
+    // Flag que controla se o token será adicionado
+    private var shouldAddAuthHeader: Boolean = true
+
+    // Método para desabilitar a adição do token
+    fun disableAuthHeader() {
+        shouldAddAuthHeader = false
+    }
+
+    // Método para habilitar a adição do token
+    fun enableAuthHeader() {
+        shouldAddAuthHeader = true
+    }
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val token = sharedPreferencesManager.getToken()
+
+        // Cria um builder para a requisição
         val requestBuilder = chain.request().newBuilder()
-        if (token != null) {
+
+        // Se a flag estiver habilitada, adiciona o token no cabeçalho
+        if (shouldAddAuthHeader && token != null) {
             requestBuilder.addHeader("Authorization", "Bearer $token")
         }
 
+        // Continua com a requisição
         return chain.proceed(requestBuilder.build())
     }
 }
