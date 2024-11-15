@@ -29,7 +29,7 @@ class FileRepositoryImpl(
                 } else {
                     emit(Result.failure(Exception("Response body is null")))
                 }
-            }else{
+            } else {
                 val errorMessage = response.errorBody()?.string() ?: "Erro desconhecido"
                 emit(Result.failure(Exception(errorMessage)))
             }

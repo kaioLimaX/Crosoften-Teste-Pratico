@@ -24,7 +24,6 @@ class BookRepositoryImpl(private val apiService: ApiService) : BookRepository {
             val dataList = body?.data?.filterNotNull() // Remove elementos nulos
 
             if (dataList != null) {
-                Log.i("info_lista", "getBooks: $dataList ")
                 emit(Result.success(dataList))
 
             } else {
