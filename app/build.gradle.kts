@@ -73,6 +73,9 @@ dependencies {
     implementation ("com.guolindev.permissionx:permissionx:1.8.1")
     implementation(libs.core.ktx)
 
+    //roboelectric
+    testImplementation ("org.robolectric:robolectric:4.9")
+
     // test koin
     testImplementation ("io.insert-koin:koin-test-junit4:3.4.0")
     //mockk

@@ -2,10 +2,10 @@ package com.skymob.crosoftenteste.data.remote.repository
 
 import com.skymob.crosoftenteste.data.remote.api.ApiService
 import com.skymob.crosoftenteste.data.remote.api.interceptors.AuthInterceptor
-import com.skymob.crosoftenteste.data.remote.dto.user.LoginRequest
-import com.skymob.crosoftenteste.data.remote.dto.user.LoginResponse
-import com.skymob.crosoftenteste.data.remote.dto.user.RegisterRequest
-import com.skymob.crosoftenteste.data.remote.dto.user.RegisterResponse
+import com.skymob.crosoftenteste.data.remote.models.getFakeLoginRequest
+import com.skymob.crosoftenteste.data.remote.models.getFakeLoginResponse
+import com.skymob.crosoftenteste.data.remote.models.getFakeRegisterRequest
+import com.skymob.crosoftenteste.data.remote.models.getFakeRegisterResponse
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -45,8 +45,8 @@ class UserRepositoryImplTest {
 
     @Test
     fun post_registerUser_Success() = runBlocking {
-        val registerRequest = RegisterRequest("John Doe", "john@example.com", "password", "password")
-        val registerResponse = RegisterResponse(123, "John Doe", "john@example.com","10/10/2024", "10/10/2024")
+        val registerRequest = getFakeRegisterRequest()
+        val registerResponse = getFakeRegisterResponse()
         val response = Response.success(registerResponse)
 
         coEvery { apiService.registerUser(registerRequest) } returns response
@@ -70,11 +70,11 @@ class UserRepositoryImplTest {
     @Test
     fun post_loginUser_Success() = runBlocking {
         // Simulando a resposta do API com MockK
-        val registerRequest = LoginRequest("John Doe", "john@example.com")
-        val registerResponse = LoginResponse("123")
-        val response = Response.success(registerResponse)
+        val loginRequest = getFakeLoginRequest()
+        val loginResponse = getFakeLoginResponse()
+        val response = Response.success(loginResponse)
 
-        coEvery { apiService.loginUser(registerRequest) } returns response
+        coEvery { apiService.loginUser(loginRequest) } returns response
         coEvery { authInterceptor.disableAuthHeader() } just Runs
         coEvery { authInterceptor.enableAuthHeader() } just Runs
 
@@ -84,7 +84,7 @@ class UserRepositoryImplTest {
         // Verifica a emissão de resultado
         result.collect { result ->
             assertTrue(result.isSuccess)
-            assertEquals(registerResponse, result.getOrNull())
+            assertEquals(loginResponse, result.getOrNull())
         }
 
         // Verifica se os métodos do interceptor foram chamados
