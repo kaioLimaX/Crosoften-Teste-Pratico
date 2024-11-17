@@ -17,5 +17,8 @@ interface BookRepository {
 
     suspend fun addBook(bookRequest : BookRequest) : Flow<Result<Data>>
 
+    suspend fun removeBook(id: Int) : Flow<Result<Unit>>
+
+
 
 }

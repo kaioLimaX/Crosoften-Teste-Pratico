@@ -89,6 +89,23 @@ class BookRepositoryImplTest {
 
         }
     }
+    @Test
+    fun delete_deleteBook_returnSuccess() = runBlocking {
+
+        val response = Response.success(Unit)
+
+        // Mock da chamada do API Service para retornar o Response correto
+        coEvery { apiService.deleteBook(1) } returns response
+
+        // Chama o método do repositório
+        val resultFlow = bookRepository.removeBook(1)
+
+        // Coleta o resultado do Flow e realiza as asserções
+        resultFlow.collect { result ->
+            assertTrue(result.isSuccess)
+
+        }
+    }
 
     @Test
     fun post_addBook_Success() = runBlocking {

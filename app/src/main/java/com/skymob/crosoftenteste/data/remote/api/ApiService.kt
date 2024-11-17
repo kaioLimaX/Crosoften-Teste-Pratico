@@ -11,6 +11,7 @@ import com.skymob.crosoftenteste.data.remote.dto.user.RegisterResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -45,4 +46,9 @@ interface ApiService {
 
     @GET("books/{id}")
     suspend fun getBookById(@Path("id") id: Int): Response<Data>
+
+    @DELETE("books/{id}")
+    suspend fun deleteBook(@Path("id") id: Int): Response<Unit>
+
 }
+

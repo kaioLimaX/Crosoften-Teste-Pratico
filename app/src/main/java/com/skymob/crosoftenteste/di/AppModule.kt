@@ -12,6 +12,7 @@ import com.skymob.crosoftenteste.domain.repository.UserRepository
 import com.skymob.crosoftenteste.domain.usecases.auth.LoginUseCase
 import com.skymob.crosoftenteste.domain.usecases.auth.RegisterUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.AddBookUseCase
+import com.skymob.crosoftenteste.domain.usecases.book.DeleteBookUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.GetAllBooksUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.GetBookByIdUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.SearchBookUseCase
@@ -63,13 +64,14 @@ val appModule = module {
     factory { SearchBookUseCase(get()) }
     factory { UploadFileUseCase(get()) }
     factory { AddBookUseCase(get()) }
+    factory { DeleteBookUseCase(get()) }
 
     //viewModels
     viewModel { RegisterViewModel(get()) }
 
     viewModel { LoginViewModel(get(), get()) }
-    viewModel { ListViewModel(get(), get()) }
-    viewModel { SearchViewModel(get()) }
+    viewModel { ListViewModel(get(), get(),get()) }
+    viewModel { SearchViewModel(get(),get()) }
     viewModel { NewBookViewModel(get(),get()) }
     viewModel { ProfileViewModel(get()) }
 

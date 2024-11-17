@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,8 +34,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>() {
         initObserver()
         initConfigSearchBar()
         initRecyclerView()
-
-
 
 
     }
@@ -67,9 +63,15 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>() {
     }
 
     private fun initRecyclerView() {
-        bookAdapter = BookAdapter { book ->
-            navigateToBookDetails(book.id)
-        }
+        bookAdapter = BookAdapter (
+            onItemClick = {
+                navigateToBookDetails(it.id)
+            },
+            onDeleteClick = {
+                viewModel.deleteBook(it.id)
+            }
+
+        )
         binding.rvSearch.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = bookAdapter

@@ -35,13 +35,20 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
         super.onViewCreated(view, savedInstanceState)
 
         initObserver()
+        viewModel.getBooks()
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
-        bookAdapter = BookAdapter { book ->
-            viewModel.getBookDetails(book.id)
-        }
+        bookAdapter = BookAdapter (
+            onItemClick = {
+                viewModel.getBookDetails(it.id)
+
+            },
+            onDeleteClick = {
+                viewModel.deleteBook(it.id)
+            }
+        )
         binding.rvBooks.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = bookAdapter
@@ -62,6 +69,26 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
     }
 
     private fun initObserver() {
+        viewModel.deleteBookStatus.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                is ViewState.Error -> {
+                    alertLoading.close()
+                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                }
+                is ViewState.Loading -> {
+                    alertLoading.show("Deletando livro")
+                }
+                is ViewState.Sucess -> {
+                    alertLoading.close()
+                    Toast.makeText(requireContext(), "Livro deletado com sucesso", Toast.LENGTH_SHORT).show()
+                    viewModel.getBooks()
+
+                }
+                null -> Unit
+            }
+
+        }
+
         viewModel.getBookDetailsStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
                 is ViewState.Error -> {

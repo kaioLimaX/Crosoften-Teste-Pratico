@@ -80,6 +80,12 @@ dependencies {
     testImplementation ("io.insert-koin:koin-test-junit4:3.4.0")
     //mockk
     testImplementation ("io.mockk:mockk:1.13.2") // MockK para mocking
+
+    //biblioteca do AndroidX usado em testes unitários para garantir que o código que manipula o LiveData seja executado de forma síncrona.
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+    //
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
+
     testImplementation(libs.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)

@@ -72,4 +72,18 @@ class BookRepositoryImpl(private val apiService: ApiService) : BookRepository {
         emit(Result.failure(e))
 
     }
+
+    override suspend fun removeBook(id: Int): Flow<Result<Unit>> = flow {
+        val response = apiService.deleteBook(id)
+        if(response.isSuccessful){
+            emit(Result.success(Unit))
+        }else{
+            val errorMessage = response.errorBody()?.string() ?: "Erro desconhecido"
+            emit(Result.failure(Exception(errorMessage)))
+
+        }
+    }.catch {
+        emit(Result.failure(it))
+
+    }
 }

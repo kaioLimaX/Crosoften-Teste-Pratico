@@ -8,7 +8,8 @@ import com.skymob.crosoftenteste.data.remote.dto.book.Data
 import com.skymob.crosoftenteste.databinding.ItemBookBinding
 
 class BookAdapter(
-    private val onItemClick: (Data) -> Unit
+    private val onItemClick: (Data) -> Unit,
+    private val onDeleteClick: (Data) -> Unit
 ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
     private var books = listOf<Data>()
@@ -20,6 +21,7 @@ class BookAdapter(
             binding.txtAutor.text = book.author
             binding.txtCategoria.text = book.category!!.title
             binding.root.setOnClickListener { onItemClick(book) }
+            binding.btnRemove.setOnClickListener { onDeleteClick(book) }
         }
     }
 
