@@ -56,6 +56,7 @@ class ListViewModelTest {
         // Cria mocks usando MockK
         getAllBooksUseCase = mockk()
         getBookByIdUseCase = mockk()
+        deleteBookUseCase = mockk()
 
         listViewModel = ListViewModel(getAllBooksUseCase, getBookByIdUseCase,deleteBookUseCase)
     }
@@ -77,6 +78,22 @@ class ListViewModelTest {
             observer.onChanged(match { it is ViewState.Sucess && it.data == bookResponse.data })
         }
 
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun testRemoveBook_returnSuccess() = runTest {
+        val bookId = 1
+        coEvery { deleteBookUseCase.invoke(bookId) } returns flowOf(Result.success(Unit))
+        listViewModel.deleteBook(1)
+
+        // Verifica o estado inicial (Loading)
+        val loadingState = listViewModel.deleteBookStatus.getOrAwaitValue()
+        assertTrue(loadingState is ViewState.Loading)
+
+        advanceUntilIdle()
+        val successState = listViewModel.deleteBookStatus.getOrAwaitValue()
+        assertTrue(successState is ViewState.Sucess)
     }
 
     @Test

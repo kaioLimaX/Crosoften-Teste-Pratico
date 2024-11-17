@@ -65,14 +65,14 @@ class ListViewModel(
     }
 
     fun deleteBook(id: Int) {
-        viewModelScope.launch {
-            _deleteBookStatus.value = ViewState.Loading()
+        viewModelScope.launch(Dispatchers.IO) {
+            _deleteBookStatus.postValue(ViewState.Loading())
             deleteBookUseCase.invoke(id)
                 .collect { result ->
                     result.onSuccess {
-                        _deleteBookStatus.value = ViewState.Sucess(it)
+                        _deleteBookStatus.postValue(ViewState.Sucess(it))
                     }.onFailure {
-                        _deleteBookStatus.value = ViewState.Error(it.message.toString())
+                        _deleteBookStatus.postValue(ViewState.Error(it.message.toString()))
                     }
 
                 }
