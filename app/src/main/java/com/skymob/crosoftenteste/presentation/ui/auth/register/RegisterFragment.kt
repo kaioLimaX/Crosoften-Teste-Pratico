@@ -48,7 +48,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding, RegisterViewModel
             when(status){
                 is ViewState.Error -> {
                     alertLoading.close()
-                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "erro ao registrar usuario", Toast.LENGTH_SHORT).show()
                 }
                 is ViewState.Loading -> {
                     alertLoading.show("Registrando Usuario")

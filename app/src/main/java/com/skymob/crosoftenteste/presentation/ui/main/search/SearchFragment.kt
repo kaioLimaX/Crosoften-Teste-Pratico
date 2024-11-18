@@ -97,7 +97,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>() {
             bookAdapter.updateBooks(emptyList())
             when (status) {
                 is ViewState.Error -> {
-                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                    showProgressBar(false)
+                    Toast.makeText(requireContext(), "Ocorreu um erro inesperado, tente novamente", Toast.LENGTH_SHORT).show()
                 }
 
                 is ViewState.Loading -> {

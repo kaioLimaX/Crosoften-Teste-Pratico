@@ -3,120 +3,132 @@ package com.skymob.crosoftenteste.presentation.ui.main.list
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.skymob.crosoftenteste.data.remote.dto.book.Data
-import com.skymob.crosoftenteste.data.remote.dto.user.LoginResponse
-import com.skymob.crosoftenteste.data.remote.dto.user.RegisterResponse
 import com.skymob.crosoftenteste.data.remote.models.getFakeBookResponse
-import com.skymob.crosoftenteste.data.remote.models.getFakeData
-import com.skymob.crosoftenteste.data.remote.models.getFakeRegisterResponse
-import com.skymob.crosoftenteste.domain.usecases.auth.RegisterUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.DeleteBookUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.GetAllBooksUseCase
 import com.skymob.crosoftenteste.domain.usecases.book.GetBookByIdUseCase
-import com.skymob.crosoftenteste.presentation.ui.auth.register.RegisterViewModel
 import com.skymob.crosoftenteste.presentation.ui.state.ViewState
-import com.skymob.crosoftenteste.util.getOrAwaitValue
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
-import org.junit.jupiter.api.Assertions.*
-
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import org.koin.core.component.get
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import java.time.Instant
+import org.koin.dsl.module
+import org.koin.test.KoinTest
 import kotlin.test.Test
 
-class ListViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class ListViewModelTest : KoinTest {
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()  // Para execução do LiveData
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var listViewModel: ListViewModel
-    private lateinit var getAllBooksUseCase: GetAllBooksUseCase
-    private lateinit var getBookByIdUseCase: GetBookByIdUseCase
-    private lateinit var deleteBookUseCase: DeleteBookUseCase
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(TestCoroutineDispatcher())
-        // Cria mocks usando MockK
-        getAllBooksUseCase = mockk()
-        getBookByIdUseCase = mockk()
-        deleteBookUseCase = mockk()
+        Dispatchers.setMain(testDispatcher)
 
-        listViewModel = ListViewModel(getAllBooksUseCase, getBookByIdUseCase,deleteBookUseCase)
+        val testModule = module {
+            single<GetAllBooksUseCase> { mockk() }
+            single<GetBookByIdUseCase> { mockk() }
+            single<DeleteBookUseCase> { mockk() }
+        }
+
+        startKoin { modules(testModule) }
+
+        val getAllBooksUseCase: GetAllBooksUseCase = get()
+        val getBookByIdUseCase: GetBookByIdUseCase = get()
+        val deleteBookUseCase: DeleteBookUseCase = get()
+
+        listViewModel = ListViewModel(getAllBooksUseCase, getBookByIdUseCase, deleteBookUseCase)
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
+        Dispatchers.resetMain()
     }
 
     @Test
-    fun testGetAllBooksUseCase_returnSuccess() = runBlocking {
+    fun `test getBooks success`() = runTest {
         val bookResponse = getFakeBookResponse()
-        coEvery {
-            getAllBooksUseCase.invoke()
-        } returns flowOf(Result.success(bookResponse.data!!))
+        val getAllBooksUseCase: GetAllBooksUseCase = get()
+
+        coEvery { getAllBooksUseCase.invoke() } returns flowOf(Result.success(bookResponse.data!!))
 
         val observer: Observer<ViewState<List<Data>>> = mockk(relaxed = true)
         listViewModel.listBooksStatus.observeForever(observer)
 
         listViewModel.getBooks()
+        advanceUntilIdle()
 
         verifyOrder {
             observer.onChanged(match { it is ViewState.Loading })
             observer.onChanged(match { it is ViewState.Sucess && it.data == bookResponse.data })
         }
 
+        listViewModel.listBooksStatus.removeObserver(observer)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     @Test
-    fun testRemoveBook_returnSuccess() = runTest {
+    fun `test getBookDetails success`() = runTest {
+        val bookDetail = getFakeBookResponse().data!!.first()
+        val getBookByIdUseCase: GetBookByIdUseCase = get()
+
+        coEvery { getBookByIdUseCase.invoke(bookDetail.id) } returns flowOf(
+            Result.success(
+                bookDetail
+            )
+        )
+
+        val observer: Observer<ViewState<Data>?> = mockk(relaxed = true)
+        listViewModel.getBookDetailsStatus.observeForever(observer)
+
+        listViewModel.getBookDetails(bookDetail.id)
+        advanceUntilIdle()
+
+        verifyOrder {
+            observer.onChanged(match { it is ViewState.Loading })
+            observer.onChanged(match { it is ViewState.Sucess && it.data == bookDetail })
+            observer.onChanged(null) // Deve limpar o estado
+        }
+
+        listViewModel.getBookDetailsStatus.removeObserver(observer)
+    }
+
+    @Test
+    fun `test deleteBook success`() = runTest {
         val bookId = 1
+        val deleteBookUseCase: DeleteBookUseCase = get()
+
         coEvery { deleteBookUseCase.invoke(bookId) } returns flowOf(Result.success(Unit))
-        listViewModel.deleteBook(1)
 
-        // Verifica o estado inicial (Loading)
-        val loadingState = listViewModel.deleteBookStatus.getOrAwaitValue()
-        assertTrue(loadingState is ViewState.Loading)
+        val observer: Observer<ViewState<Unit>?> = mockk(relaxed = true)
+        listViewModel.deleteBookStatus.observeForever(observer)
 
-        advanceUntilIdle()
-        val successState = listViewModel.deleteBookStatus.getOrAwaitValue()
-        assertTrue(successState is ViewState.Sucess)
-    }
-
-    @Test
-    fun `test getBooks success`() = runTest {
-        val bookResponse = getFakeBookResponse()
-        coEvery { getAllBooksUseCase.invoke() } returns flowOf(Result.success(bookResponse.data!!))
-
-        listViewModel.getBooks()
-
-        // Verifica o estado inicial (Loading)
-        val loadingState = listViewModel.listBooksStatus.getOrAwaitValue()
-        assertTrue(loadingState is ViewState.Loading)
-
-        // Avança o tempo para garantir que o Flow seja processado
+        listViewModel.deleteBook(bookId)
         advanceUntilIdle()
 
-        // Verifica o estado final (Sucess)
-        val successState = listViewModel.listBooksStatus.getOrAwaitValue()
-        assertTrue(successState is ViewState.Sucess)
-        assertEquals(bookResponse.data, (successState as ViewState.Sucess).data)
+        verifyOrder {
+            observer.onChanged(match { it is ViewState.Loading })
+            observer.onChanged(match { it is ViewState.Sucess })
+        }
 
+        listViewModel.deleteBookStatus.removeObserver(observer)
     }
-
-
-
 }

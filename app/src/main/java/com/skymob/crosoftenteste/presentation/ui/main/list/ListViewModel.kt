@@ -71,6 +71,7 @@ class ListViewModel(
                 .collect { result ->
                     result.onSuccess {
                         _deleteBookStatus.postValue(ViewState.Sucess(it))
+
                     }.onFailure {
                         _deleteBookStatus.postValue(ViewState.Error(it.message.toString()))
                     }
@@ -86,6 +87,6 @@ class ListViewModel(
         _getBookDetailsStatus.value = null  // Ou um valor inicial apropriado
     }
     fun resetDeleteStatus() {
-        _deleteBookStatus.value = null  // Ou um valor inicial apropriado
+        _deleteBookStatus.value = null // Ou um valor inicial apropriado
     }
 }

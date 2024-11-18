@@ -35,8 +35,17 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
         super.onViewCreated(view, savedInstanceState)
 
         initObserver()
+        initOnClick()
         viewModel.getBooks()
         initRecyclerView()
+    }
+
+    private fun initOnClick() {
+        with(binding){
+            btnReload.setOnClickListener {
+                viewModel.getBooks()
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -73,7 +82,8 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
             when (status) {
                 is ViewState.Error -> {
                     alertLoading.close()
-                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Ocorreu um erro inesperado, tente novamente", Toast.LENGTH_SHORT).show()
+                    viewModel.resetDeleteStatus()
                 }
                 is ViewState.Loading -> {
                     alertLoading.show("Deletando livro")
@@ -82,6 +92,7 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
                     alertLoading.close()
                     Toast.makeText(requireContext(), "Livro deletado com sucesso", Toast.LENGTH_SHORT).show()
                     viewModel.getBooks()
+                    viewModel.resetDeleteStatus()
 
                 }
                 null -> Unit
@@ -93,7 +104,7 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
             when (status) {
                 is ViewState.Error -> {
                     alertLoading.close()
-                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
                     viewModel.resetBookDetailsStatus()
                 }
                 is ViewState.Loading -> {
@@ -112,7 +123,8 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
             when (status) {
                 is ViewState.Error -> {
                     showProgressBar(false)
-                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                    showErrorLayout(true)
+                    Toast.makeText(requireContext(), "Erro inesperado ao carregar livros", Toast.LENGTH_SHORT).show()
                 }
 
                 is ViewState.Loading -> {
@@ -121,10 +133,21 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
 
                 is ViewState.Sucess -> {
                     showProgressBar(false)
+                    showErrorLayout(false)
                     status.data?.let { bookAdapter.updateBooks(it) }
                 }
             }
 
+        }
+    }
+
+    private fun showErrorLayout(show: Boolean) {
+        if (show) {
+            binding.rvBooks.visibility = View.GONE
+            binding.btnReload.visibility = View.VISIBLE
+        } else {
+            binding.rvBooks.visibility = View.VISIBLE
+            binding.btnReload.visibility = View.GONE
         }
     }
 

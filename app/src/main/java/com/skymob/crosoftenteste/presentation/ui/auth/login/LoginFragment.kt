@@ -46,7 +46,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
             when(status){
                 is ViewState.Error -> {
                     alertLoading.close()
-                    Toast.makeText(requireContext(), status.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Erro ao fazer login", Toast.LENGTH_SHORT).show()
                 }
                 is ViewState.Loading -> {
                     alertLoading.show("Fazendo Login")
