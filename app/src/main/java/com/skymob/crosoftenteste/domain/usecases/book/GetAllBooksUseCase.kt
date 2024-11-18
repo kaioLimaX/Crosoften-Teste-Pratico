@@ -5,7 +5,5 @@ import com.skymob.crosoftenteste.domain.repository.BookRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetAllBooksUseCase(private val bookRepository: BookRepository) {
-    suspend operator fun invoke() : Flow<Result<List<Data>>> {
-        return bookRepository.getBooks()
-    }
+    suspend operator fun invoke() = bookRepository.getBooks()
 }

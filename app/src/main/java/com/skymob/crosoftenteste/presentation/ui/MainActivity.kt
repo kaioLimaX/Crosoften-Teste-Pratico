@@ -66,6 +66,13 @@ class MainActivity : AppCompatActivity() {
                     invalidateOptionsMenu()
                 }
 
+                R.id.detailsBookFragment ->{
+                    toolbar.visibility = View.VISIBLE
+                    bottomNavigationView.visibility = View.GONE
+                    shouldShowMenu = false
+                    invalidateOptionsMenu()
+                }
+
                 R.id.loginFragment -> {
                     toolbar.visibility = View.GONE
                     bottomNavigationView.visibility = View.GONE
