@@ -50,6 +50,7 @@ class ListFragment : BaseFragment<FragmentListBookBinding, ListViewModel>() {
 
     private fun initRecyclerView() {
         bookAdapter = BookAdapter (
+            showButtonDelete = true,
             onItemClick = {
                 viewModel.getBookDetails(it.id)
 

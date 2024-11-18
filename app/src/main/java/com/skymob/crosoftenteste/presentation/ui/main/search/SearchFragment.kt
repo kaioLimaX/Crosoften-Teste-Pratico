@@ -64,6 +64,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>() {
 
     private fun initRecyclerView() {
         bookAdapter = BookAdapter (
+            showButtonDelete = false,
             onItemClick = {
                 navigateToBookDetails(it.id)
             },

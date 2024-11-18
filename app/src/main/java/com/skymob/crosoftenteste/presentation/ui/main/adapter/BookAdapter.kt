@@ -1,6 +1,7 @@
 package com.skymob.crosoftenteste.presentation.ui.main.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -8,14 +9,20 @@ import com.skymob.crosoftenteste.data.remote.dto.book.Data
 import com.skymob.crosoftenteste.databinding.ItemBookBinding
 
 class BookAdapter(
+    private val showButtonDelete: Boolean,
     private val onItemClick: (Data) -> Unit,
-    private val onDeleteClick: (Data) -> Unit
+    private val onDeleteClick: (Data) -> Unit,
 ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
     private var books = listOf<Data>()
 
     inner class BookViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(book: Data) {
+            if (showButtonDelete) {
+                binding.btnRemove.visibility = View.VISIBLE
+            } else {
+                binding.btnRemove.visibility = View.GONE
+            }
             binding.txtTitulo.text = book.title
             binding.txtSumario.text = book.summary
             binding.txtAutor.text = book.author
