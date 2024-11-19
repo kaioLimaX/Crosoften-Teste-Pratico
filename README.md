@@ -94,7 +94,7 @@ Esses desafios proporcionaram um aprendizado significativo, ampliando minha expe
 
 ### 🛠 Ferramentas de Desenvolvimento
 
-- **Android Studio**: `Android Studio Koala | 2024.1.1 (June 2024)` (ou versão usada).
+- **Android Studio**: `Android Studio Koala | 2024.1.1 (June 2024)`.
 - **Gradle**: `7.x.x`.
 - **Kotlin**: `1.9.x`.
 - **Min SDK**: `21`.
