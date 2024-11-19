@@ -78,7 +78,6 @@ Esses desafios proporcionaram um aprendizado significativo, ampliando minha expe
 - **Retrofit**: Comunicação com APIs REST.
 - **Koin**: Injeção de dependências leve e eficiente.
 - **Logging Interceptor (OkHttp)**: Para monitorar requisições HTTP.
-- **Activity e Fragment KTX (AndroidX)**: Extensões para ViewModels e Lifecycle.
 - **Navigation (Jetpack)**: Navegação entre Fragments e telas.
 - **PermissionX**: Gerenciamento simplificado de permissões.
 
