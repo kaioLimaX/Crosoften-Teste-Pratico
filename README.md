@@ -66,8 +66,15 @@ Esses desafios proporcionaram um aprendizado significativo, ampliando minha expe
 
 ## 📷 Screenshots
 
-> Insira aqui imagens do app: tela de login, lista de livros, detalhes, cadastro de livros, busca e perfil.
-> [Descrição da Imagem](screen_login.jpg)
+| <img src="./screen_login.png" alt="Tela de Login" width="300"/> | <img src="./screen_register.png" alt="Tela de Cadastro" width="300"/> | <img src="./screen_list.png" alt="Tela de Lista" width="300"/> |
+|:-------------------------------------------------------------:|:-------------------------------------------------------------------:|:------------------------------------------------------------:|
+| **Tela de Login**                                             | **Tela de Cadastro**                                               | **Tela de Lista**                                            |
+| <img src="./screen_details.png" alt="Tela de Detalhes" width="300"/> | <img src="./screen_new_book.png" alt="Tela de Novo Livro" width="300"/> | <img src="./screen_profile.png" alt="Tela de Perfil" width="300"/> |
+| **Tela de Detalhes**                                          | **Tela de Novo Livro**                                             | **Tela de Perfil**                                           |
+| <img src="./screen_search.png" alt="Tela de Busca" width="300"/> |                                                                     |                                                              |
+| **Tela de Busca**                                             |                                                                     |                                                              |
+
+
 
 ---
 
